@@ -15,9 +15,10 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 // connect to mongodb
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://"+process.env.MONGO_USERNAME+":"+process.env.MONGO_PASS+"@"+
     process.env.MONGO_HOSTNAME+":"+process.env.MONGO_PORT+"/"+process.env.MONGO_DB+
-    "?authSource=admin", { useNewUrlParser: true, useUnifiedTopology: true})
+    "?authSource=admin", { useMongoClient: true })
     .then(() => console.log('MongoDB Connected...'))
     .catch((err) => console.log(err));
 
