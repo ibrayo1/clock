@@ -1,0 +1,17 @@
+{
+  "name": "clock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Ibrahim Ayoob <ibrayo1128@gmail.com> (https://github.com/ibrayo1/)",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.16"
+  }
+}

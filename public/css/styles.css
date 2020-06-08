@@ -1,0 +1,77 @@
+body{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;  
+    background-image: url('/images/prayer-timings-border.png'), url('/images/prayer-timings-bg.png'), linear-gradient(#E6CEB3, #CDAB89);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 100% auto;
+    background-position: top, bottom;
+}
+
+html{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.masjidlogo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 70px;
+    width: 550px;
+    height: 120px;
+}
+
+#clock-wrapper{
+    padding-top: 40px;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+#clock{
+    background-color: black;
+    color: red;
+    border-radius: 20px;
+    padding: 30px;
+    width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 110px;
+    font-family: 'lato';
+}
+
+.salahtime{
+    background-color: black;
+    color: red;
+    border-radius: 20px;
+    width: 350px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    text-align: center;
+    font-family: 'lato';
+    font-size:90px;
+}
+
+.prayername{
+    font-family: 'lato';
+    font-size:75px;
+}
+
+#timetable{
+    padding-left: 125px;
+    padding-right: 125px;
+}
+
+/* css for digital font */
+@font-face {
+    font-family: "digital";
+    src: url("/fonts/digital/digital.ttf");
+}
+
+/* css for lato font */
+@font-face {
+    font-family: "lato";
+    src: url("/fonts/lato/Lato-Regular.ttf");
+}

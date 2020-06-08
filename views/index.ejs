@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Masjid Clock</title>
+    
+        <!-- load styles sheet -->
+        <link rel="stylesheet" href="/css/styles.css">  <!-- main css -->
+
+        <script src="/js/jquery-3.4.1.min.js"></script>
+        <script src="/js/moment.js"></script>
+        <script src="/js/Adhan.js"></script>
+    </head>
+
+
+    <body>
+        <br>
+        <img class="masjidlogo" src="/images/masjid-logo-2.svg" alt="masjid as-sunnah logo" />
+        <div id="clock-wrapper">
+            <div id="clock"></div>
+        </div>
+        <table id="timetable" width="100%" height="1400px">
+            <tr>
+                <td align="left">
+                    <div class="salahtime">
+                        <%= fajr.time %>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        <%= fajr.name %>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <div class="salahtime">
+                        <%= dhuhr.time %>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        <%= dhuhr.name %>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <div class="salahtime">
+                        <%= asr.time %>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        <%= asr.name %>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <div class="salahtime" id="maghrib">
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        MAGHRIB
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <div class="salahtime">
+                        <%= isha.time %>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        <%= isha.name %>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <div class="salahtime">
+                        <%= jumuah.time %>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="prayername">
+                        <%= jumuah.name %>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+
+    <script>
+        function displayTime() {
+            var time = moment().format('h : mm : ss A');
+            $('#clock').html(time);
+            setTimeout(displayTime, 1000);
+        }
+
+        // returns the time for maghrib
+        function resetMaghribTime(){
+            var date = new Date();
+            var coordinates = new adhan.Coordinates(42.033333, -87.747543);
+            var params = adhan.CalculationMethod.NorthAmerica();
+            params.madhab = adhan.Madhab.Shafi;
+            var prayerTimes = new adhan.PrayerTimes(coordinates, date, params);
+            
+            $('#maghrib').html(moment(prayerTimes.maghrib).format('h : mm'));
+        }
+
+        function resetAtMidnight() {
+            var now = new Date();
+            var night = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() + 1, // the next day, ...
+                0, 0, 0 // ...at 00:00:00 hours
+            );
+            var msToMidnight = night.getTime() - now.getTime();
+
+            setTimeout(function() {
+                resetMaghribTime();              //      <-- This is the function being called at midnight.
+                resetAtMidnight();    //      Then, reset again next midnight.
+            }, msToMidnight);
+        }
+        
+        $(document).ready(function() {
+            displayTime();
+            resetMaghribTime();
+        });
+    </script>
+
+</html>
