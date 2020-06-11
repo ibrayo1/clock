@@ -41,7 +41,7 @@
         <table id="timetable" width="100%" height="1400px">
             <tr>
                 <td align="left">
-                    <div class="salahtime" data-id="<%= fajr._id %>" id="fajr">
+                    <div class="salahtime" data-id="<%= fajr._id %>" data-time="<%= fajr.time %>" id="fajr">
                         <%= fajr.time %>
                     </div>
                 </td>
@@ -53,7 +53,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime" data-id="<%= dhuhr._id %>" id="dhuhr">
+                    <div class="salahtime" data-id="<%= dhuhr._id %>" data-time="<%= dhuhr.time %>" id="dhuhr">
                         <%= dhuhr.time %>
                     </div>
                 </td>
@@ -65,7 +65,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime" data-id="<%= asr._id %>" id="asr">
+                    <div class="salahtime" data-id="<%= asr._id %>" data-time="<%= asr.time %>" id="asr">
                         <%= asr.time %>
                     </div>
                 </td>
@@ -88,7 +88,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime" data-id="<%= isha._id %>" id="isha">
+                    <div class="salahtime" data-id="<%= isha._id %>" data-time="<%= isha.time %>" id="isha">
                         <%= isha.time %>
                     </div>
                 </td>
@@ -100,7 +100,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime" data-id="<%= jumuah._id %>" id="jumuah">
+                    <div class="salahtime" data-id="<%= jumuah._id %>" data-time="<%= jumuah.time %>" id="jumuah">
                         <%= jumuah.time %>
                     </div>
                 </td>
@@ -176,7 +176,7 @@
                 return false;
             });
 
-            var id, hour, minute;
+            var id, time, hour, minute;
             var dialog, form;
 
             function updatePrayer(){
@@ -220,6 +220,12 @@
             $( "#fajr,#dhuhr,#asr,#isha,#jumuah" ).button().on( "click", function() {
                 dialog.dialog( "open" );
                 id = $(this).attr('data-id');
+                time = $(this).attr('data-time');
+                
+                let hr = time.substr(0, time.indexOf(':')).replace(/\s/g,''); 
+                let min = time.substr(time.indexOf(':')+1, time.length).replace(/\s/g,'');
+                $('#hour').val(hr);
+                $('#minute').val(min);
             });
             
         });
