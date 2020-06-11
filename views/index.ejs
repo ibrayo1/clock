@@ -7,15 +7,32 @@
         <title>Masjid Clock</title>
     
         <!-- load styles sheet -->
+        <link rel="stylesheet" href="/css/jquery-ui-1.12.1/jquery-ui.css" >
         <link rel="stylesheet" href="/css/styles.css">  <!-- main css -->
 
-        <script src="/js/jquery-3.4.1.min.js"></script>
-        <script src="/js/moment.js"></script>
-        <script src="/js/Adhan.js"></script>
+        <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+        <script type="text/javascript" src="/css/jquery-ui-1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="/js/moment.js"></script>
+        <script type="text/javascript" src="/js/Adhan.js"></script>
     </head>
 
 
     <body>
+        <div id="dialog-form" title="Update">
+            <form>
+                <fieldset>
+                    <div style=" text-align: center; margin-top: 72px;">
+                        <input type="text" name="hour" id="hour" value="1" class="hour wheelable" readonly> :
+                        <input type="text" name="minute" id="minute" value="50" class="minute wheelable" readonly>
+                    </div>
+           
+                    <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                    <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                </fieldset>
+            </form>
+        </div>
+
         <br>
         <img class="masjidlogo" src="/images/masjid-logo-2.svg" alt="masjid as-sunnah logo" />
         <div id="clock-wrapper">
@@ -24,7 +41,7 @@
         <table id="timetable" width="100%" height="1400px">
             <tr>
                 <td align="left">
-                    <div class="salahtime">
+                    <div class="salahtime" data-id="<%= fajr._id %>" id="fajr">
                         <%= fajr.time %>
                     </div>
                 </td>
@@ -36,7 +53,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime">
+                    <div class="salahtime" data-id="<%= dhuhr._id %>" id="dhuhr">
                         <%= dhuhr.time %>
                     </div>
                 </td>
@@ -48,7 +65,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime">
+                    <div class="salahtime" data-id="<%= asr._id %>" id="asr">
                         <%= asr.time %>
                     </div>
                 </td>
@@ -71,7 +88,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime">
+                    <div class="salahtime" data-id="<%= isha._id %>" id="isha">
                         <%= isha.time %>
                     </div>
                 </td>
@@ -83,7 +100,7 @@
             </tr>
             <tr>
                 <td align="left">
-                    <div class="salahtime">
+                    <div class="salahtime" data-id="<%= jumuah._id %>" id="jumuah">
                         <%= jumuah.time %>
                     </div>
                 </td>
@@ -100,6 +117,7 @@
         function displayTime() {
             var time = moment().format('h : mm : ss A');
             $('#clock').html(time);
+            resetAtMidnight();
             setTimeout(displayTime, 1000);
         }
 
@@ -133,6 +151,77 @@
         $(document).ready(function() {
             displayTime();
             resetMaghribTime();
+
+            $("#hour").bind("mousewheel", function(event, delta) {
+                if (delta > 0) {
+                    if (this.value < 12 )
+                        this.value = parseInt(this.value) + 1;
+                } else {
+                    if (parseInt(this.value) > 1) {
+                        this.value = parseInt(this.value) - 1;
+                    }
+                }
+                return false;
+            });
+
+            $("#minute").bind("mousewheel", function(event, delta) {
+                if (delta > 0) {
+                    if (this.value < 59 )
+                        this.value = ("0" + (parseInt(this.value) + 1)).slice(-2);
+                } else {
+                    if (parseInt(this.value) > 0) {
+                        this.value = ("0" + (parseInt(this.value) - 1)).slice(-2);
+                    }
+                }
+                return false;
+            });
+
+            var id, hour, minute;
+            var dialog, form;
+
+            function updatePrayer(){
+                hour = $( "#hour" ).val(),
+                minute = $( "#minute" ).val()
+                $.ajax({
+                    'method': 'POST',
+                    'url':'./update/'+id,
+                    data: { hour: hour, minute: minute },
+                    success: function(result){
+                        window.location.reload(); // refresh the current page
+                    },
+                    error: function(err){
+                        console.log(err); // console log an error if theres an error
+                    }
+                });
+                dialog.dialog( "close" );
+            }
+
+            dialog = $( "#dialog-form" ).dialog({
+                autoOpen: false,
+                height: 400,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Update": updatePrayer,
+                    Cancel: function() {
+                        dialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+                    form[ 0 ].reset();
+                }
+            });
+
+            form = dialog.find( "form" ).on( "submit", function( event ) {
+                event.preventDefault();
+                updatePrayer();
+            });
+
+            $( "#fajr,#dhuhr,#asr,#isha,#jumuah" ).button().on( "click", function() {
+                dialog.dialog( "open" );
+                id = $(this).attr('data-id');
+            });
+            
         });
     </script>
 

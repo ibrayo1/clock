@@ -46,7 +46,7 @@ html{
     background-color: black;
     color: red;
     border-radius: 20px;
-    width: 350px;
+    width: 350px !important;
     padding-top: 25px;
     padding-bottom: 25px;
     text-align: center;
@@ -74,4 +74,34 @@ html{
 @font-face {
     font-family: "lato";
     src: url("/fonts/lato/Lato-Regular.ttf");
+}
+
+/* The Modal (background) */
+label, input { 
+    display:inline-block; 
+}
+
+.hour{
+    width: 60px;
+}
+
+.minute{
+    width: 60px;
+}
+
+fieldset { 
+    padding:0; 
+    border:0; 
+    margin-top:25px; 
+    font-size: 50px;
+}
+
+.ui-corner-all.ui-widget{
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+}
+
+.ui-dialog .ui-dialog-titlebar-close{
+    margin-top: -10px;
 }

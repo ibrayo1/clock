@@ -4,12 +4,17 @@ const app = express();
 const server = require('http').createServer(app);
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 // define the port
 const PORT = process.env.PORT || 3000;
 
 // set view engine to ejs
 app.set('view engine', 'ejs');
+
+// body parser middleware
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 // static folder
 app.use(express.static('public'));
@@ -24,7 +29,7 @@ mongoose.connect("mongodb://"+process.env.MONGO_USERNAME+":"+process.env.MONGO_P
 
 const Prayer = require("./models/Prayer");
 
-// render the index file
+// get request for all the prayers
 app.get("/", function(req, res){
     
     // get all the prayer times and render them
@@ -41,6 +46,23 @@ app.get("/", function(req, res){
         }
     });
 
+});
+
+// updates the prayer and reloads the page
+app.post("/update/:id", function(req, res){
+    const {hour, minute} = req.body;
+    const time = hour + " : " + minute;
+
+    let salah = { $set: { time: time }};
+    let query = {_id: req.params.id};
+
+    Prayer.updateOne(query, salah, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            res.redirect('/');
+        }
+    });
 });
 
 server.listen(PORT, () => {
