@@ -117,7 +117,6 @@
         function displayTime() {
             var time = moment().format('h : mm : ss A');
             $('#clock').html(time);
-            resetAtMidnight();
             setTimeout(displayTime, 1000);
         }
 
@@ -127,9 +126,11 @@
             var coordinates = new adhan.Coordinates(42.033333, -87.747543);
             var params = adhan.CalculationMethod.NorthAmerica();
             params.madhab = adhan.Madhab.Shafi;
+            params.adjustments.maghrib = 1;
             var prayerTimes = new adhan.PrayerTimes(coordinates, date, params);
             
             $('#maghrib').html(moment(prayerTimes.maghrib).format('h : mm'));
+            resetAtMidnight();
         }
 
         function resetAtMidnight() {
